@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SYED IMTHIYAZ — Data Analyst & Data Science Student</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<!-- Chart.js for animated graphs -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+    :root{
+      --bg:#0f1720; /* dark background */
+    --card:#0b1220;
+    --muted: #9aa6b2;
+      --accent:#1abc9c; /* teal */
+    --glass: rgba(255,255,255,0.04);
+--glass-2: rgba(255,255,255,0.03);
+--radius: 14px;
+--glass-border: rgba(255,255,255,0.04);
+--max-width:1100px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+    margin:0;
+    font-family:'Open Sans',system-ui,Arial;
+    background: radial-gradient(1200px 600px at 10% 10%, rgba(26,188,156,0.06), transparent),linear-gradient(180deg,#071021 0%, #081226 40%);
+    color:#e6eef6;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    line-height:1.5;
+    }
+
+    /* Layout container */
+    .container{max-width:var(--max-width);margin:0 auto;padding:28px}
+
+    nav{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
+    .brand{display:flex;gap:12px;align-items:center}
+    .brand h1{font-family:'Montserrat';font-weight:700;margin:0;font-size:20px;letter-spacing:0.4px}
+    .nav-links{display:flex;gap:18px;align-items:center}
+    .nav-links a{color:var(--muted);text-decoration:none;font-weight:600}
+    .nav-links a:hover{color:var(--accent)}
+
+    /* Hero */
+    .hero{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:center;padding:36px 0}
+    .hero-left{padding:20px}
+    .eyebrow{color:var(--accent);font-weight:700;margin-bottom:10px}
+    .tagline{font-family:'Montserrat';font-size:34px;margin:0 0 14px}
+    .intro{color:var(--muted);margin-bottom:18px}
+    .cta{display:flex;gap:12px}
+    .btn{background:linear-gradient(90deg,var(--accent),#16a085);border:none;padding:12px 18px;border-radius:10px;color:#021016;font-weight:700;cursor:pointer;box-shadow:0 8px 30px rgba(26,188,156,0.12);transition:transform .18s,box-shadow .18s}
+    .btn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--accent)}
+    .btn:hover{transform:translateY(-4px)}
+
+    /* Profile card */
+    .hero-right{position:relative;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:16px;padding:18px;border:1px solid var(--glass-border);box-shadow:0 10px 30px rgba(2,6,23,0.6)}
+    .profile{display:flex;gap:16px;align-items:center}
+    .profile img{width:88px;height:88px;border-radius:14px;object-fit:cover;border:2px solid rgba(255,255,255,0.06)}
+    .meta h2{margin:0;font-size:18px;font-family:'Montserrat'}
+    .meta p{margin:4px 0 0;color:var(--muted);font-size:13px}
+
+    /* little chart canvas */
+    .chart-wrap{margin-top:14px}
+    canvas{width:100%!important;height:160px!important}
+
+    /* sections */
+    section{padding:48px 0}
+    h3{font-family:'Montserrat';margin:0 0 18px;font-size:20px}
+    .sub-muted{color:var(--muted);margin-bottom:18px}
+
+    /* About */
+    .about-grid{display:grid;grid-template-columns:1fr 320px;gap:18px}
+    .card{background:var(--card);border-radius:12px;padding:18px;border:1px solid var(--glass-border)}
+
+    /* Skills */
+    .skills-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .skill{padding:12px;border-radius:10px;background:linear-gradient(180deg,var(--glass),transparent);display:flex;flex-direction:column}
+    .skill .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+    .progress{height:10px;background:rgba(255,255,255,0.06);border-radius:999px;overflow:hidden}
+    .progress > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),#16a085);border-radius:999px;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+
+    /* Projects */
+    .projects{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .project-card{border-radius:12px;padding:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);border:1px solid rgba(255,255,255,0.04);transition:transform .18s,box-shadow .18s}
+    .project-card:hover{transform:translateY(-8px);box-shadow:0 30px 60px rgba(2,8,23,0.6)}
+    .thumb{height:140px;border-radius:10px;overflow:hidden;margin-bottom:12px}
+    .thumb img{width:100%;height:100%;object-fit:cover}
+    .tools{display:flex;gap:8px;margin-top:10px}
+    .tool{font-size:13px;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.03)}
+
+    /* Contact */
+    .contact-grid{display:grid;grid-template-columns:1fr 340px;gap:18px}
+    form{display:flex;flex-direction:column;gap:10px}
+    input,textarea{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:12px;border-radius:10px;color:inherit}
+    input:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 6px 24px rgba(26,188,156,0.06)}
+    .contact-card .meta-item{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+    .meta-item i{font-size:18px;color:var(--accent)}
+
+    /* Footer */
+    footer{padding:20px 0;color:var(--muted);text-align:center}
+
+    /* Responsive */
+    @media (max-width:980px){
+.hero{grid-template-columns:1fr;}
+    .about-grid{grid-template-columns:1fr}
+    .skills-grid{grid-template-columns:1fr}
+    .projects{grid-template-columns:1fr}
+    .contact-grid{grid-template-columns:1fr}
+    .hero-right{order:2}
+    }
+
+</style>
+</head>
+<body>
+<div class="container">
+    <nav>
+    <div class="brand">
+        <i class="fa-solid fa-database" style="color:var(--accent);font-size:20px"></i>
+        <h1>SYED IMTHIYAZ</h1>
+    </div>
+    <div class="nav-links">
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+    </div>
+    </nav>
+
+    <!-- HERO -->
+    <header class="hero">
+    <div class="hero-left">
+        <div class="eyebrow">Transforming Data into Decisions.</div>
+        <h2 class="tagline">Data Analyst &amp; Data Science student skilled in turning raw data into actionable insights.</h2>
+        <p class="intro">I specialize in predictive modeling, data visualization and statistical analysis — using Python, SQL and ML to uncover patterns and build models that help teams make decisions.</p>
+
+        <div class="cta">
+        <button class="btn" onclick="document.querySelector('#projects').scrollIntoView({behavior:'smooth'})">View Portfolio</button>
+        <button class="btn secondary" onclick="document.querySelector('#contact').scrollIntoView({behavior:'smooth'})">Contact Me</button>
+        </div>
+
+        <div style="margin-top:20px;color:var(--muted)">Proficiencies: <strong style="color:var(--accent)">Python</strong>, SQL, Scikit-learn, Pandas, Power BI</div>
+    </div>
+
+    <aside class="hero-right card">
+        <!-- Replace 'assets/profile.jpg' with your real photo -->
+        <div class="profile">
+        <img src="assets/profile.jpg" alt="SYED IMTHIYAZ — profile picture" id="profilePic">
+        <div class="meta">
+            <h2>SYED IMTHIYAZ</h2>
+            <p>Data Analyst • Data Science Student</p>
+        </div>
+        </div>
+
+        <div class="chart-wrap card" style="margin-top:8px;padding:12px">
+        <canvas id="miniChart"></canvas>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;margin-top:12px">
+        <div style="font-size:13px;color:var(--muted)"><strong>Location</strong><div>India</div></div>
+        <div style="font-size:13px;color:var(--muted)"><strong>Education</strong><div>B.Tech — JNTUA</div></div>
+        </div>
+    </aside>
+    </header>
+
+    <!-- ABOUT -->
+    <section id="about">
+    <div class="about-grid">
+        <div>
+        <h3>About Me</h3>
+        <p class="sub-muted">Hi, I'm <strong>SYED IMTHIYAZ</strong>. A data-driven problem solver with expertise in Python, SQL, and machine learning. I transform complex datasets into actionable insights. I specialize in predictive modeling, data visualization, and statistical analysis—passionate about uncovering patterns that drive smarter decisions.</p>
+
+        <div class="card">
+            <h4 style="margin-top:0">What I Do</h4>
+            <ul style="margin:8px 0 0 18px;color:var(--muted)">
+            <li>Clean, analyze, and visualize data to tell compelling stories.</li>
+            <li>Build ML models for forecasting, classification, and optimization.</li>
+            <li>Leverage tools like Pandas, Tableau, and Scikit-learn to solve real-world problems.</li>
+            </ul>
+        </div>
+
+        <div style="margin-top:12px" class="card">
+            <h4 style="margin-top:0">Education</h4>
+            <p style="color:var(--muted);margin:6px 0">B.Tech in Computer Science — Viswam Engineering College, JNTUA University (2022–2026)</p>
+            <p style="color:var(--muted);margin:6px 0"><strong>Relevant Coursework:</strong> Machine Learning, Statistical Analysis, Database Systems, Python Programming.</p>
+        </div>
+        </div>
+
+        <div>
+        <h3>Quick Stats</h3>
+        <div class="card" style="padding:16px">
+            <div style="display:flex;justify-content:space-between;margin-bottom:10px">
+            <div>
+                <div style="font-size:20px;font-weight:700">5+</div>
+                <div style="color:var(--muted);font-size:13px">Projects</div>
+            </div>
+            <div>
+                <div style="font-size:20px;font-weight:700">Python</div>
+                <div style="color:var(--muted);font-size:13px">Advanced</div>
+            </div>
+            </div>
+            <div style="margin-top:8px;color:var(--muted)">Available for internships & freelance projects — open to collaborations in Finance / Healthcare / Marketing domains.</div>
+        </div>
+        </div>
+    </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills">
+    <h3>Skills</h3>
+    <p class="sub-muted">Technical and soft skills with proficiency indicators.</p>
+
+    <div class="skills-grid">
+        <div class="skill">
+        <div class="top"><strong>Python (Pandas, NumPy, Scikit-learn)</strong><span>90%</span></div>
+        <div class="progress"><i data-width="90%"></i></div>
+        </div>
+
+        <div class="skill">
+        <div class="top"><strong>SQL (Joins, Window Functions)</strong><span>85%</span></div>
+        <div class="progress"><i data-width="85%"></i></div>
+        </div>
+
+        <div class="skill">
+        <div class="top"><strong>Power BI / Plotly / Excel</strong><span>78%</span></div>
+        <div class="progress"><i data-width="78%"></i></div>
+        </div>
+
+        <div class="skill">
+        <div class="top"><strong>Statistical Analysis & ML</strong><span>80%</span></div>
+        <div class="progress"><i data-width="80%"></i></div>
+        </div>
+    </div>
+
+    <div style="margin-top:18px">
+        <h4 style="margin-bottom:8px">Soft Skills</h4>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <div class="tool">Problem-Solving</div>
+        <div class="tool">Data Storytelling</div>
+        <div class="tool">Collaboration</div>
+        <div class="tool">Domain Knowledge (Finance/Healthcare/Marketing)</div>
+        </div>
+    </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects">
+<h3>Projects</h3>
+    <p class="sub-muted">Selected work — click through to view code and details.</p>
+
+    <div class="projects">
+        <!-- Project 1 -->
+        <div class="project-card">
+        <div class="thumb"><img src="assets/uber_thumb.png" alt="UBER Trip Overview"></div>
+        <h4>UBER Trip Overview Analysis</h4>
+        <p style="color:var(--muted)">Data cleaning, EDA, and visualization to uncover trends in trip patterns — peak hours, surge areas, and trip duration analysis.</p>
+        <div class="tools">
+            <div class="tool"><i class="fa-brands fa-python"></i> Python</div>
+            <div class="tool">Pandas</div>
+            <div class="tool">Matplotlib</div>
+            <div class="tool">Seaborn</div>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
+        <a class="btn secondary" href="#" onclick="openLink('https://github.com/your-username/uber-analysis')">View on GitHub</a>
+    </div>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="project-card">
+    <div class="thumb"><img src="assets/zomato_thumb.png" alt="Zomato Overview"></div>
+    <h4>Zomato Overview Analysis</h4>
+    <p style="color:var(--muted)">Insights into restaurant data, customer preferences, ratings and pricing trends using SQL and Power BI dashboards.</p>
+    <div class="tools">
+            <div class="tool">SQL</div>
+            <div class="tool">Power BI</div>
+            <div class="tool">Python</div>
+    </div>
+    <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
+            <a class="btn secondary" href="#" onclick="openLink('https://github.com/your-username/zomato-analysis')">View on GitHub</a>
+    </div>
+    </div>
+
+    </div>
+
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+    <h3>Contact</h3>
+    <p class="sub-muted">Get in touch for internships, freelance work, or collaboration.</p>
+
+<div class="contact-grid">
+        <div>
+    <form id="contactForm" onsubmit="submitForm(event)">
+            <input required type="text" id="name" placeholder="Your name">
+            <input required type="email" id="email" placeholder="Your email">
+            <textarea required id="message" rows="6" placeholder="Message"></textarea>
+            <button class="btn" type="submit">Send Message</button>
+    </form>
+    </div>
+
+    <div class="contact-card card">
+    <div class="meta-item"><i class="fa-solid fa-envelope"></i><div><strong>Email</strong><div style="color:var(--muted);">syedimthiyaz456@gmail.com</div></div></div>
+    <div class="meta-item"><i class="fa-brands fa-linkedin"></i><div><strong>LinkedIn</strong><div style="color:var(--muted);">linkedin.com/in/syed-imthiyaz-9a8a52305</div></div></div>
+    <div class="meta-item"><i class="fa-solid fa-phone"></i><div><strong>Phone</strong><div style="color:var(--muted);">+91 9550730829</div></div></div>
+
+    <hr style="border:none;border-top:1px solid rgba(255,255,255,0.03);margin:12px 0">
+    <div style="color:var(--muted);font-size:13px">Or connect on LinkedIn — I share project walkthroughs, notebooks and dashboard screenshots there.</div>
+        </div>
+    </div>
+    </section>
+
+    <footer>
+    <div>© <span id="year"></span> SYED IMTHIYAZ — Built with curiosity & ☕</div>
+    </footer>
+
+</div>
+
+<script>
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Mini chart (animated)
+    const ctx = document.getElementById('miniChart').getContext('2d');
+    const miniChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+        datasets: [{
+        label: 'Trips',
+        data: [120,170,140,190,220,240,200],
+        tension:0.36,
+        borderWidth:2,
+    pointRadius:0,
+    fill:true,
+    backgroundColor: 'rgba(26,188,156,0.12)',
+    borderColor: 'rgba(26,188,156,0.95)'
+        }]
+    },
+    options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false}},
+        scales:{x:{display:false},y:{display:false}}
+    }
+    });
+
+    // Progress bars animate on scroll
+    const progressEls = document.querySelectorAll('.progress i');
+    const io = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+        if(e.isIntersecting){
+        const el = e.target;
+        const w = el.getAttribute('data-width') || '50%';
+        setTimeout(()=>el.style.width = w,120);
+        }
+    })
+    },{threshold:.2});
+    progressEls.forEach(p=>io.observe(p));
+
+    // Smooth fade-in on scroll
+    const revealEls = document.querySelectorAll('section, .project-card, .card');
+    const rev = new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+        if(entry.isIntersecting) entry.target.style.transform = 'none', entry.target.style.opacity=1;
+    })
+    },{threshold:0.12});
+    revealEls.forEach(r=>{r.style.opacity=0;r.style.transform='translateY(14px)';rev.observe(r)});
+
+    // Simple contact form handler
+    function submitForm(e){
+    e.preventDefault();
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const message = document.getElementById('message').value.trim();
+    if(!name||!email||!message){alert('Please fill in all fields');return}
+      // This is a placeholder. Replace with your form endpoint or email service.
+    alert('Thanks '+name+" — your message has been received (demo). Replace this handler with your backend.");
+    document.getElementById('contactForm').reset();
+    }
+
+    // Open external links
+    function openLink(url){
+window.open(url,'_blank');
+}
+
+// Accessibility: focus outline for keyboard users
+document.addEventListener('keyup',e=>{ if(e.key==='Tab') document.body.classList.add('show-focus'); });
+
+</script>
+</body>
+</html>
